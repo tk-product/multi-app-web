@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Error Page</title>
+</head>
+<body>
+<h1>Error Occurred</h1>
+
+<h3>Message:</h3>
+<p th:text="${errorForm.errorMessage}"></p>
+
+<h3>Stack Trace:</h3>
+<pre th:text="${errorForm.stackTrace}"></pre>
+
+<h3>Session Info:</h3>
+<ul>
+	<li th:each="entry : ${errorForm.sessionAttributes}">
+		<strong th:text="${entry.key}">Key</strong> : <span th:text="${entry.value}">Value</span>
+	</li>
+</ul>
+</body>
+</html>

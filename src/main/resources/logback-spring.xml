@@ -1,0 +1,33 @@
+<configuration>
+    <!-- コンソールアペンダーの設定 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/application.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- Spring Boot のデフォルトログ (org.springframework など) を OFF に設定 -->
+    <logger name="org.springframework" level="OFF"/>
+    <logger name="org.apache" level="OFF"/>
+    <logger name="org.hibernate" level="OFF"/>
+    <!-- ExceptionHandlerExceptionResolverのWARNログが出るのでOFFにする -->
+    <logger name="org.springframework.web.servlet.mvc" level="OFF"/>
+    <!-- 自作パッケージは DEBUG レベルで出力 -->
+    <logger name="com.recipe" level="DEBUG"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+
+</configuration>

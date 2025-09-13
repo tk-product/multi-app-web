@@ -1,0 +1,5 @@
+rootProject.name = 'multi-app-web'
+
+include 'multi-app-shared'
+project(':multi-app-shared').projectDir = file('../multi-app-shared')
+
