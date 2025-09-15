@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Throwable.class)
     public String handleException(Throwable ex, Model model, HttpSession session) {
-        System.out.println("★★★handleException : ");
+        
         ErrorForm errorForm = new ErrorForm();
 
         // Exceptionのメッセージ

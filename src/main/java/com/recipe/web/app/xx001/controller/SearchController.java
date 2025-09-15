@@ -24,7 +24,7 @@ public class SearchController extends BaseController {
 
     @GetMapping("/search")
     public String searchPage(Model model) {
-        System.out.println("★★★searchPage : ");
+        
         UserSession user = (UserSession) httpSession.getAttribute("USER_SESSION");
         model.addAttribute("user", user);
 
@@ -36,7 +36,7 @@ public class SearchController extends BaseController {
             model.addAttribute("rolesStr", "");
         }
 
-        model.addAttribute("searchForm", new Object());
+        model.addAttribute("searchForm", new SearchForm());
         return "search";
     }
 

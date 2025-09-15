@@ -10,10 +10,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   thymeleaf:
     cache: false
-  security:
-    user:
-      name: sample # ユーザー名
-      password: password # パスワード
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
   type-aliases-package: com.recipe.domain.entity
