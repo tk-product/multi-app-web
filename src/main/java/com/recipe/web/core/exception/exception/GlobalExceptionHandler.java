@@ -1,4 +1,4 @@
-package com.recipe.web.exception;
+package com.recipe.web.core.exception.exception;
 
 import com.recipe.web.app.common.form.ErrorForm;
 import jakarta.servlet.http.HttpServletRequest;

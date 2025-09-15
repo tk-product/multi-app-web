@@ -1,4 +1,4 @@
-package com.recipe.web.filter;
+package com.recipe.web.core.filter;
 
 import com.recipe.web.app.common.session.UserSession;
 import jakarta.servlet.FilterChain;
@@ -8,12 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Component
+//@Component
 public class LoginFilter extends OncePerRequestFilter {
 
     @Value("${app.login.local-url:/local-login}")
@@ -31,6 +30,7 @@ public class LoginFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
+        System.out.println("★★★LoginFilter : ");
         HttpSession session = request.getSession(false);
         UserSession user = (session != null) ? (UserSession) session.getAttribute("USER_SESSION") : null;
 
@@ -38,7 +38,6 @@ public class LoginFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         if (path.startsWith("/css") || path.startsWith("/js") || path.startsWith("/images")
                 || path.startsWith("/local-login") || path.startsWith("/external-callback")) {
-            System.out.println("★★★doFilterInternal : ");
             filterChain.doFilter(request, response);
             return;
         }

@@ -2,9 +2,9 @@ app:
   login:
     local-url: /local-login
     external-url: https://dummy-auth.local/login
-spring:
-  devtools:
-    restart:
-      enabled: true   # 自動リスタートを有効化（デフォルトはtrue）
-    livereload:
-      enabled: true   # ブラウザの自動リロード
+#spring:
+#  devtools:
+#    restart:
+#      enabled: true   # 自動リスタートを有効化（デフォルトはtrue）
+#    livereload:
+#      enabled: true   # ブラウザの自動リロード

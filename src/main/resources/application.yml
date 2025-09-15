@@ -4,7 +4,7 @@ spring:
   profiles:
     active: local
   datasource:
-    url: jdbc:mysql://localhost:3306/postgres?useSSL=false&serverTimezone=Asia/Tokyo
+    url: jdbc:mysql://localhost:3306/mysql?useSSL=false&serverTimezone=Asia/Tokyo
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -15,5 +15,5 @@ spring:
       name: sample # ユーザー名
       password: password # パスワード
 mybatis:
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: classpath*:mapper/*.xml
   type-aliases-package: com.recipe.domain.entity

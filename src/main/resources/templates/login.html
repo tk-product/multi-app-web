@@ -27,12 +27,13 @@
 <div class="login-container">
 	<h2 class="login-title">ログイン</h2>
 
-	<form method="post" th:action="@{/local-login}">
-		<input name="redirect" th:value="${param.redirect}" type="hidden"/>
+	<form method="post" th:action="@{/perform-login}">
+		<!--		<input name="redirect" th:value="${param.redirect}" type="hidden"/>-->
 
 		<div class="mb-3">
-			<label class="form-label" for="userId">ユーザーID</label>
-			<input class="form-control" id="userId" name="userId" placeholder="ユーザーIDを入力" required type="text">
+			<label class="form-label" for="username">ユーザーID</label>
+			<input class="form-control" id="username" name="username" placeholder="ユーザーIDを入力" required
+			       type="text">
 		</div>
 
 		<div class="mb-3">

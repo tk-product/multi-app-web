@@ -13,5 +13,10 @@ import java.util.Set;
 public class UserSession implements Serializable {
     private String userId;
     private String userName;
-    private Set<String> roles; // 例: ADMIN, EDITOR, VIEWER
+
+    // 社内/社外などの大枠のrole
+    private String role;
+
+    // 権限レベル：ADMIN, EDIT, VIEW など
+    private Set<String> permissionLevel;
 }
