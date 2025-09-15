@@ -1,11 +1,11 @@
 package com.recipe.web.app.xx001.controller;
 
 import com.recipe.base.BaseController;
-import com.recipe.web.app.common.session.UserSession;
 import com.recipe.web.app.xx001.form.SearchForm;
 import com.recipe.web.app.xx001.service.SearchService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,18 +23,19 @@ public class SearchController extends BaseController {
     private final SearchService searchService;
 
     @GetMapping("/search")
+    @PreAuthorize("hasPermission('search', 'VIEW')")
     public String searchPage(Model model) {
-        
-        UserSession user = (UserSession) httpSession.getAttribute("USER_SESSION");
-        model.addAttribute("user", user);
 
-        // Set<String> → カンマ区切り文字列に変換して渡す
-        if (user != null && user.getRole() != null) {
-            String rolesStr = String.join(", ", user.getRole());
-            model.addAttribute("rolesStr", rolesStr);
-        } else {
-            model.addAttribute("rolesStr", "");
-        }
+//        UserSession user = (UserSession) httpSession.getAttribute("USER_SESSION");
+//        model.addAttribute("user", user);
+//
+//        // Set<String> → カンマ区切り文字列に変換して渡す
+//        if (user != null && user.getRole() != null) {
+//            String rolesStr = String.join(", ", user.getRole());
+//            model.addAttribute("rolesStr", rolesStr);
+//        } else {
+//            model.addAttribute("rolesStr", "");
+//        }
 
         model.addAttribute("searchForm", new SearchForm());
         return "search";

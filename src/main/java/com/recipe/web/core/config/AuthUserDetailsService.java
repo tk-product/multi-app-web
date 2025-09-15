@@ -1,4 +1,4 @@
-package com.recipe.web.app.common.service;
+package com.recipe.web.core.config;
 
 import com.recipe.domain.entity.Auth;
 import com.recipe.domain.mapper.AuthMapper;
@@ -35,7 +35,7 @@ public class AuthUserDetailsService implements UserDetailsService {
                 .collect(Collectors.toList());
 
         authorities.addAll(permissions.stream()
-                .map(p -> new SimpleGrantedAuthority("PERM_" + p))
+                .map(SimpleGrantedAuthority::new)
                 .toList());
 
         return new User(user.getUsername(), user.getPassword(), user.isEnabled(),

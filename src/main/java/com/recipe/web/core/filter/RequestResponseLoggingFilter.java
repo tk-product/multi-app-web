@@ -1,5 +1,6 @@
 package com.recipe.web.core.filter;
 
+import com.recipe.web.app.common.session.UserSession;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.lang.NonNull;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -18,10 +22,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -55,10 +56,10 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(wrappedRequest, wrappedResponse);
         } finally {
-
             // **レスポンスのログをレスポンス送信時に出力**
             logResponse(wrappedResponse, requestId);
-            wrappedResponse.copyBodyToResponse(); // キャッシュを元に戻す
+            // キャッシュを元に戻す
+            wrappedResponse.copyBodyToResponse();
         }
     }
 
@@ -87,8 +88,27 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         String headers = getResponseHeaders(response);
         String responseBody = getResponseBody(response);
 
+        // 認証後ログ
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = "";
+        List<String> roles = List.of();
+        List<String> permissions = List.of();
+        if (auth != null) {
+            username = auth.getName();
+            roles = auth.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .toList();
+            roles = auth.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .toList();
+        }
+        UserSession userSession = new UserSession();
+        userSession.setUserName(username);
+        userSession.setRole(roles.getFirst());
+        userSession.setPermissionLevel(username);
         logger.info("SessionID: {}, RequestID: {}, Response Status: {}", sessionId, requestId, status);
         logger.info("SessionID: {}, RequestID: {}, Response Headers: {}", sessionId, requestId, headers);
+        logger.info("SessionID: {}, RequestID: {}, UserName: {}, ROLE: {}, PERMISSION: {}", sessionId, requestId, username, roles);
     }
 
     private String getRequestHeaders(HttpServletRequest request) {
