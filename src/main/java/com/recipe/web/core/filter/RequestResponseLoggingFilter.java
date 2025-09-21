@@ -108,7 +108,7 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         userSession.setPermissionLevel(username);
         logger.info("SessionID: {}, RequestID: {}, Response Status: {}", sessionId, requestId, status);
         logger.info("SessionID: {}, RequestID: {}, Response Headers: {}", sessionId, requestId, headers);
-        logger.info("SessionID: {}, RequestID: {}, UserName: {}, ROLE: {}, PERMISSION: {}", sessionId, requestId, username, roles);
+        logger.info("SessionID: {}, RequestID: {}, UserName: {}, Role: {}, Permission: {}", sessionId, requestId, headers, roles, permissions);
     }
 
     private String getRequestHeaders(HttpServletRequest request) {

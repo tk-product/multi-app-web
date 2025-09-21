@@ -4,15 +4,15 @@
 <body>
 <h1>Home</h1>
 
-<div sec:authorize="hasRole('ROLE_ADMIN')">
+<div sec:authorize="hasRole('EU_ADMIN')">
 	<a th:href="@{/admin/dashboard}">管理者ダッシュボード</a>
 </div>
 
-<div sec:authorize="hasAuthority('PERM_WRITE')">
+<div sec:authorize="hasAuthority('EU_EDIT')">
 	<button>編集ボタン</button>
 </div>
 
-<div sec:authorize="hasAuthority('PERM_READ')">
+<div sec:authorize="hasAuthority('EU_READ')">
 	<p>閲覧可能な内容</p>
 </div>
 
