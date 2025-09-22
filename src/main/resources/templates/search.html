@@ -6,7 +6,7 @@
 </head>
 <body>
 <!-- 共通ヘッダー -->
-<div th:replace="common/header :: header"></div>
+<div th:insert="common/header :: header"></div>
 
 <div class="container mt-5">
 	<form class="mb-3" method="post" th:action="@{/search}" th:object="${searchForm}">

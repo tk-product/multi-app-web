@@ -1,11 +1,11 @@
 package com.recipe.web.core.filter;
 
-import com.recipe.web.app.common.session.UserSession;
+import com.recipe.web.core.config.CustomUserDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -26,12 +26,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RequestResponseLoggingFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseLoggingFilter.class);
     private static final String REQUEST_ID_HEADER = "X-Request-Id";
-    private HttpServletRequest request;
+    private final HttpServletRequest request;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
@@ -39,13 +39,6 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(response);
 
-        // `OPTIONS` リクエストの処理
-        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-            response.setStatus(HttpServletResponse.SC_OK);
-        }
-
-        // キャッシュ無効
-        wrappedResponse.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         String requestId = UUID.randomUUID().toString();
         // MDC (Mapped Diagnostic Context) にリクエストIDを保存（ロギングに利用できる）
         MDC.put(REQUEST_ID_HEADER, requestId);
@@ -92,19 +85,19 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = "";
         List<String> roles = List.of();
-        if (auth != null) {
-            username = auth.getName();
-            roles = auth.getAuthorities().stream()
+        List<String> permissions = List.of();
+        if (auth != null && auth.getPrincipal() instanceof CustomUserDetails userDetails) {
+            username = userDetails.getUsername();
+            roles = userDetails.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .toList();
+            permissions = userDetails.getPermissions();
+
         }
-        UserSession userSession = new UserSession();
-        userSession.setUserName(username);
-        userSession.setRoles(roles);
 
         logger.info("SessionID: {}, RequestID: {}, Response Status: {}", sessionId, requestId, status);
         logger.info("SessionID: {}, RequestID: {}, Response Headers: {}", sessionId, requestId, headers);
-        logger.info("SessionID: {}, RequestID: {}, UserName: {}, Role: {}, Permission: {}", sessionId, requestId, headers, roles);
+        logger.info("SessionID: {}, RequestID: {}, UserName: {}, Role: {}, Permission: {}", sessionId, requestId, username, roles, permissions);
     }
 
     private String getRequestHeaders(HttpServletRequest request) {
