@@ -8,14 +8,14 @@
 <h1>Error Occurred</h1>
 
 <h3>Message:</h3>
-<p th:text="${errorForm.errorMessage}"></p>
+<p th:text="${errorForm != null ? errorForm.errorMessage : null}"></p>
 
 <h3>Stack Trace:</h3>
-<pre th:text="${errorForm.stackTrace}"></pre>
+<pre th:text="${errorForm != null ? errorForm.stackTrace : null}"></pre>
 
 <h3>Session Info:</h3>
 <ul>
-	<li th:each="entry : ${errorForm.sessionAttributes}">
+	<li th:each="entry : ${errorForm != null ? errorForm.sessionAttributes : null}">
 		<strong th:text="${entry.key}">Key</strong> : <span th:text="${entry.value}">Value</span>
 	</li>
 </ul>

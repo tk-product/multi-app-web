@@ -11,34 +11,35 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AuthUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
 
     private final AuthMapper authMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Auth user = authMapper.findByUsername(username);
+        Auth user = authMapper.findByEmail(username);
         if (user == null) {
-            throw new UsernameNotFoundException("User not found: " + username);
+            throw new UsernameNotFoundException("User not found");
         }
 
         List<String> roles = authMapper.findRolesByUserId(user.getUserId());
         List<String> permissions = authMapper.findPermissionsByUserId(user.getUserId());
 
-        List<GrantedAuthority> authorities = roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        roles.forEach(r -> authorities.add(new SimpleGrantedAuthority("ROLE_" + r)));
+        permissions.forEach(p -> authorities.add(new SimpleGrantedAuthority(p))); // 画面ID権限も追加
 
-        authorities.addAll(permissions.stream()
-                .map(SimpleGrantedAuthority::new)
-                .toList());
-
-        return new User(user.getUsername(), user.getPassword(), user.isEnabled(),
-                true, true, true, authorities);
+        return new User(
+                user.getEmail(),
+                user.getPassword(),
+                user.isEnabled(),
+                true, true, true,
+                authorities
+        );
     }
 }

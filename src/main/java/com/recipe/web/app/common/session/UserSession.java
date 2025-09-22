@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -14,8 +15,6 @@ public class UserSession implements Serializable {
     private String userName;
 
     // 社内/社外などの大枠のrole
-    private String role;
+    private List<String> roles;
 
-    // 権限レベル：ADMIN, EDIT, VIEW など
-    private String permissionLevel;
 }

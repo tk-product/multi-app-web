@@ -92,23 +92,19 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = "";
         List<String> roles = List.of();
-        List<String> permissions = List.of();
         if (auth != null) {
             username = auth.getName();
-            roles = auth.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .toList();
             roles = auth.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .toList();
         }
         UserSession userSession = new UserSession();
         userSession.setUserName(username);
-        userSession.setRole(roles.getFirst());
-        userSession.setPermissionLevel(username);
+        userSession.setRoles(roles);
+
         logger.info("SessionID: {}, RequestID: {}, Response Status: {}", sessionId, requestId, status);
         logger.info("SessionID: {}, RequestID: {}, Response Headers: {}", sessionId, requestId, headers);
-        logger.info("SessionID: {}, RequestID: {}, UserName: {}, Role: {}, Permission: {}", sessionId, requestId, headers, roles, permissions);
+        logger.info("SessionID: {}, RequestID: {}, UserName: {}, Role: {}, Permission: {}", sessionId, requestId, headers, roles);
     }
 
     private String getRequestHeaders(HttpServletRequest request) {
